@@ -76,7 +76,7 @@ public class Actividad {
         return descripcion;
     }
 
-    /**
+    /**ffffffeeeeerrrrniiiiii
      * @param descripcion the descripcion to set
      */
     public void setDescripcion(String descripcion) {

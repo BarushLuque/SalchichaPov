@@ -5,8 +5,10 @@
 package mx.itson.salchicha.entidades;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -119,8 +121,62 @@ public class Servicio {
     public void setActividades(List<Actividad> actividades) {
         this.actividad = actividades;
     }
+    public static boolean save(String descripcion_problema, String id_responsable){
+        boolean resultado = false;
+        try{
+            Connection conexion = Conexion.obtener();
+            String consulta = "INSERT INTO servicio (descripcion_problema, id_responsable, fecha_realizacion) VALUES (?, ?, ?)";
+            PreparedStatement statement = conexion.prepareStatement(consulta);
+            statement.setString(1, descripcion_problema);
+            statement.setString(2, id_responsable);
+            
+            //Hora real
+            LocalDateTime localDate = LocalDateTime.now();
+            statement.setObject(3, localDate);
+            
+            statement.execute();
+            resultado = statement.getUpdateCount() == 1;
+            conexion.close();
+        }catch(Exception ex){
+            System.err.println("Ocurrió un error: " + ex.getMessage());
+        }
+        return resultado;
+        
+        
+    }
+    public static boolean edit(int id, String descripcion_problema, String id_responsable){
+        boolean resultado = false;
+        try{
+            Connection conexion = Conexion.obtener();
+            String consulta = "UPDATE servicio SET descripcion_problema = ?, id_responsable = ? WHERE id = ?";
+            PreparedStatement statement = conexion.prepareStatement(consulta);
+            statement.setString(1, descripcion_problema);
+            statement.setString(2, id_responsable);
+            statement.execute();
+            resultado = statement.getUpdateCount() == 1;
+            conexion.close();
+        }catch(Exception ex){
+            System.err.println("Ocurrió un error: " + ex.getMessage());
+        }
+        return resultado;
+    }
     
-    
+    public static boolean delete(int id){
+        boolean resultado = false;
+        try{
+            Connection conexion = Conexion.obtener();
+            String consulta = "DELETE FROM servicio WHERE id = ?";
+            PreparedStatement statement = conexion.prepareStatement(consulta);
+            statement.setInt(1, id);
+            
+            statement.execute();
+            resultado = statement.getUpdateCount() == 1;
+            conexion.close();
+        }catch(Exception ex){
+            System.err.println("Ocurrió un error: " + ex.getMessage());
+        }
+        return resultado;
+    }
 
     
 }

@@ -5,7 +5,9 @@
 package mx.itson.salchicha.ui;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import mx.itson.salchicha.entidades.Responsable;
+import mx.itson.salchicha.entidades.Servicio;
 
 /**
  *
@@ -44,19 +46,20 @@ public class ServicioForm extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtService = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         cmbResponsables = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
+        btnAggServ = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 24)); // NOI18N
         jLabel1.setText("Registro de Servicio");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtService.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtServiceActionPerformed(evt);
             }
         });
 
@@ -72,6 +75,13 @@ public class ServicioForm extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         jLabel3.setText("Responsable");
 
+        btnAggServ.setText("Agregar");
+        btnAggServ.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAggServActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,9 +92,13 @@ public class ServicioForm extends javax.swing.JDialog {
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtService, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbResponsables, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(58, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAggServ)
+                .addGap(116, 116, 116))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,25 +108,44 @@ public class ServicioForm extends javax.swing.JDialog {
                 .addGap(25, 25, 25)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtService, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbResponsables, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(186, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                .addComponent(btnAggServ)
+                .addGap(54, 54, 54))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtServiceActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtServiceActionPerformed
 
     private void cmbResponsablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbResponsablesActionPerformed
         // TODO add your handling code here:
         
     }//GEN-LAST:event_cmbResponsablesActionPerformed
+
+    private void btnAggServActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAggServActionPerformed
+        // TODO add your handling code here:
+        String nombre = txtService.getText();
+        String puesto = cmbResponsables.getName();
+        
+        boolean resultado = this.id == 0 ?
+                    Servicio.save(nombre, puesto) :
+                    Servicio.edit(id, nombre, puesto);
+        if(resultado){
+            JOptionPane.showMessageDialog(this, "El nuevo servicio se guardó correctamente", "Servicio guardado", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        }else{
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al intentar guardar el Servicio", "Error al guardar", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnAggServActionPerformed
 
     /**
      * @param args the command line arguments
@@ -157,10 +190,11 @@ public class ServicioForm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAggServ;
     private javax.swing.JComboBox<Responsable> cmbResponsables;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtService;
     // End of variables declaration//GEN-END:variables
 }

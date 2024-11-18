@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.salchicha.entidades.Servicio;
 
@@ -57,13 +58,13 @@ public class ServiciosListado extends javax.swing.JFrame {
 
         tblServicios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Id", "Responsable", "Descripcion", "Actividades", "Fecha"
+                "id", "Responsable", "Descripcion", "Fecha"
             }
         ));
         jScrollPane1.setViewportView(tblServicios);
@@ -154,10 +155,63 @@ public class ServiciosListado extends javax.swing.JFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
+        int selectRow = tblServicios.getSelectedRow();
+        if(selectRow != -1){
+            Servicio sR = Servicio.getAll().get(selectRow);
+        ServicioForm form = new ServicioForm(this, true, sR.getId());
+        form.setVisible(true);
+        cargarTableServicios();
+        }else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un servicio para editar.");
+        }
+    
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
+        // AQUI ME QUEDE
+        // Verificar si hay un registro seleccionado
+    int renglon = tblServicios.getSelectedRow();
+    if (renglon == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Seleccione un registro para eliminar.",
+                "Advertencia",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // Obtener el ID del servicio seleccionado
+    try {
+        int idServicio = Integer.parseInt(tblServicios.getModel().getValueAt(renglon, 0).toString());
+
+        // Confirmación del usuario
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que desea eliminar el registro?",
+                "Eliminar",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            // Intentar eliminar el servicio
+            if (Servicio.delete(idServicio)) {
+                JOptionPane.showMessageDialog(this,
+                        "El servicio se eliminó con éxito.",
+                        "Servicio eliminado",
+                        JOptionPane.INFORMATION_MESSAGE);
+                cargarTableServicios(); // Actualizar tabla
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Ocurrió un error al eliminar el servicio.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this,
+                "Ocurrió un error al obtener el ID del servicio.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
@@ -169,7 +223,7 @@ public class ServiciosListado extends javax.swing.JFrame {
     }//GEN-LAST:event_btnActividadesActionPerformed
     
     public static String convertirDate (Date date){
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
     String fecha = dateFormat.format(date);   
     
     return fecha;
@@ -184,7 +238,7 @@ public class ServiciosListado extends javax.swing.JFrame {
                 s.getId(),
                 s.getResponsable().getNombre(),
                 s.getDescripcionProblema(),
-                s.getActividad().size(),
+   
                 convertirDate(s.getFechaRealizacion())
             });
         }

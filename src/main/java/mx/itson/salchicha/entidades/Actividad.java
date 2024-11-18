@@ -42,6 +42,7 @@ public class Actividad {
     private String descripcion;
     
     /**
+     * 
      * @return the id
      */
     public int getId() {
@@ -77,6 +78,7 @@ public class Actividad {
     }
 
     /**ffffffeeeeerrrrniiiiii
+     * 
      * @param descripcion the descripcion to set
      */
     public void setDescripcion(String descripcion) {
